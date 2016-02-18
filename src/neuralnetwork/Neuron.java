@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Neuron
 {
-	private static int idCount = 0;
+	public static int idCount = 0;
 
 	protected float output = 0;
 	protected float deltaOutput = 0;
@@ -40,7 +40,7 @@ public class Neuron
 
 	public void addConnection(Connection c)
 	{
-		connections.add(new Connection(c));
+		connections.add(c);
 	}
 	
 	public float sumInputs()
@@ -48,9 +48,9 @@ public class Neuron
 		float sum = 0.0f;
 		for(Connection c : connections)
 		{
-			if(c.getTo().equals(this))
+			if(c.to == this)
 			{
-				sum += c.from.getOutput() * c.getWeight();
+				sum += c.from.output * c.weight;
 			}
 		}
 		return sum;
@@ -59,7 +59,6 @@ public class Neuron
 	public float calcOutput()
 	{
 		output = sigmoid(sumInputs());
-		//System.out.println("" + this + "\n" + output);
 		return output;
 	}
 	

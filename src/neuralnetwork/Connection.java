@@ -7,6 +7,8 @@ package neuralnetwork;
  */
 public class Connection
 {
+	protected static int idCount = 0;
+	private int id;
 	protected Neuron from;
 	protected Neuron to;
 	protected float weight;
@@ -26,7 +28,8 @@ public class Connection
 		// shallow copies
 		this.from = from;
 		this.to = to;
-		this.weight = (float) (Math.random() * 2 - 1);
+		this.weight = (float) Math.random() * 2 - 1;
+		this.id = idCount++;
 	}
 
 	public Connection(Neuron from, Neuron to, float weight)
@@ -51,7 +54,7 @@ public class Connection
 	@Override
 	public String toString()
 	{
-		return  "" + from.getId() + "->" + to.getId() + " : " + weight;
+		return  "" + from.getId() + "->" + to.getId() + " : " + weight  + "(" + this.id + ")";
 	}
 
 	// Getters and Setters
