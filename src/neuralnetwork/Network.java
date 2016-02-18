@@ -1,13 +1,15 @@
 package neuralnetwork;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Network
+public class Network implements Serializable
 {
-
+	private static final long serialVersionUID = 8761956216073345540L;
 	protected ArrayList<Neuron[]> network = new ArrayList<Neuron[]>();
-	public static final float LEARNING_CONSTANT = 2.0f;
-
+	
+	public float learningRate = 2.0f;
+	
 	public Network(int... layers)
 	{
 		// Generate Neurons
@@ -40,25 +42,24 @@ public class Network
 					if (i + 1 == network.size() - 1 || k < network.get(i + 1).length - 1)
 					{
 						Connection c = new Connection(network.get(i)[j], network.get(i + 1)[k]);
-						network.get(i)[j].addConnection(c);
-						network.get(i + 1)[k].addConnection(c);
+						network.get(i)[j].connections.add(c);
+						network.get(i + 1)[k].connections.add(c);
 					}
 				}
 			}
 		}
-
 	}
 
 	// Functional methods
 	// --------------------------------------------------------
 
-	// probs works
+	// http://www.hostmath.com/Show.aspx?Code=%20\delta_{o}%20%3D%20%28out_o%20-%20target_o%29%20\space%20out_{o}%20\space%20%281%20-%20out_{o}%29\\%0A%20\delta_h%20%3D%20%28\sum_o{\delta_o%20\space%20w_{ho}}%29%20\space%20out_h%20\space%20%281%20-%20out_h%29\\%0A\Delta%20w_i%20%3D%20\eta%20\space%20\delta_o%20\space%20w_i\\
 	public float[] feedForward(float... inputs)
 	{
 		// set input neurons
 		for (int i = 0; i < network.get(0).length - 1; i++)
 		{
-			network.get(0)[i].setOutput(inputs[i]);
+			network.get(0)[i].output = inputs[i];
 		}
 
 		// calculate the output for each hidden layer
@@ -81,16 +82,8 @@ public class Network
 
 		for (int i = 0; i < network.get(network.size() - 1).length; i++)
 		{
-			outputs[i] = network.get(network.size() - 1)[i].getOutput();
+			outputs[i] = network.get(network.size() - 1)[i].output;
 		}
-		
-//		for(Neuron[] layer : network)
-//		{
-//			for(Neuron n : layer)
-//			{
-//				System.out.println(n + " | " + n.output);
-//			}
-//		}
 
 		return outputs;
 	}
@@ -101,11 +94,11 @@ public class Network
 		float[] outputs = feedForward(inputs);
 
 		// compute error at output level
-
+		
 		for(int i = 0; i < network.get(network.size() - 1).length; i++)
 		{
 			// formula in latex
-			//\delta_{o1} = -(target_{o1} - out_{o1}) * out_{o1}(1 - out_{o1})
+			//\delta_{o} = (out_o - target_o) \space out_{o} \space (1 - out_{o})\\
 			network.get(network.size() - 1)[i].deltaOutput = (outputs[i] - answers[i]) * outputs[i] * (1 - outputs[i]);
 		}
 		
@@ -122,14 +115,14 @@ public class Network
 				{
 					if(c.from == network.get(i)[j])
 					{
-//						System.out.println(c);
 						sum += c.to.deltaOutput * c.weight;
 					}
 				}
+				// formula in latex
+				//  \delta_h = (\sum_o{\delta_o \space w_{ho}}) \space out_h \space (1 - out_h)\\
 				network.get(i)[j].deltaOutput = sum * network.get(i)[j].output * (1 - network.get(i)[j].output);
 			}
 		}
-		
 		
 		// update all weights
 
@@ -143,21 +136,13 @@ public class Network
 				{
 					if(c.from == network.get(i)[j])
 					{
-//						System.out.println(c);
-						c.weight -= c.to.deltaOutput * c.from.output;
+						// formula in latex
+						// \Delta w_i = \eta \space \delta_o \space w_i\\
+						c.weight -= c.to.deltaOutput * c.from.output * learningRate;
 					}
 				}
 			}
 		}
-		
-		
-//		for(Neuron[] layer : network)
-//		{
-//			for(Neuron n : layer)
-//			{
-//				System.out.println(n + " | " + n.deltaOutput);
-//			}
-//		}
 		
 		return outputs;
 	}

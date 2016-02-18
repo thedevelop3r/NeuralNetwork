@@ -1,9 +1,12 @@
 package neuralnetwork;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Neuron
+public class Neuron implements Serializable
 {
+	private static final long serialVersionUID = -3178838640951519288L;
+
 	public static int idCount = 0;
 
 	protected float output = 0;

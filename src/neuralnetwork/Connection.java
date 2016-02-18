@@ -1,12 +1,16 @@
 package neuralnetwork;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author rjm27
  *
  */
-public class Connection
+public class Connection implements Serializable
 {
+	private static final long serialVersionUID = -4425671170051982905L;
+	
 	protected static int idCount = 0;
 	private int id;
 	protected Neuron from;
@@ -54,40 +58,6 @@ public class Connection
 	@Override
 	public String toString()
 	{
-		return  "" + from.getId() + "->" + to.getId() + " : " + weight  + "(" + this.id + ")";
+		return  "" + from.id + "->" + to.id+ " : " + weight  + "(" + this.id + ")";
 	}
-
-	// Getters and Setters
-	// --------------------------------
-
-	public Neuron getFrom()
-	{
-		return new Neuron(this.from);
-	}
-
-	public void setFrom(Neuron from)
-	{
-		this.from = new Neuron(from);
-	}
-
-	public Neuron getTo()
-	{
-		return new Neuron(this.to);
-	}
-
-	public void setTo(Neuron to)
-	{
-		this.to = new Neuron(to);
-	}
-
-	public float getWeight()
-	{
-		return weight;
-	}
-
-	public void setWeight(float weight)
-	{
-		this.weight = weight;
-	}
-
 }
