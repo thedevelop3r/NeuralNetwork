@@ -53,7 +53,7 @@ public class Network implements Serializable
 	// Functional methods
 	// --------------------------------------------------------
 
-	// http://www.hostmath.com/Show.aspx?Code=%20\delta_{o}%20%3D%20%28out_o%20-%20target_o%29%20\space%20out_{o}%20\space%20%281%20-%20out_{o}%29\\%0A%20\delta_h%20%3D%20%28\sum_o{\delta_o%20\space%20w_{ho}}%29%20\space%20out_h%20\space%20%281%20-%20out_h%29\\%0A\Delta%20w_i%20%3D%20\eta%20\space%20\delta_o%20\space%20w_i\\
+	
 	public float[] feedForward(float... inputs)
 	{
 		// set input neurons
@@ -89,6 +89,7 @@ public class Network implements Serializable
 	}
 
 	// some sorcery of calculus
+	// http://www.hostmath.com/Show.aspx?Code=%20\delta_{o}%20%3D%20%28out_o%20-%20target_o%29%20\space%20out_{o}%20\space%20%281%20-%20out_{o}%29\\%0A%20\delta_h%20%3D%20%28\sum_o{\delta_o%20\space%20w_{ho}}%29%20\space%20out_h%20\space%20%281%20-%20out_h%29\\%0A\Delta%20w_i%20%3D%20\eta%20\space%20\delta_o%20\space%20w_i\\
 	public float[] train(float[] inputs, float[] answers)
 	{
 		float[] outputs = feedForward(inputs);
